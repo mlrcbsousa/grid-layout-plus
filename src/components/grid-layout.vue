@@ -245,8 +245,8 @@ watch(
 )
 watch(
   () => [props.layout, props.layout.length],
-  () => {
-    currentLayout.value = props.layout
+  (layout: Layout) => {
+    currentLayout.value = layout
     layoutUpdate()
   }
 )
@@ -316,6 +316,10 @@ provide(
 provide(EMITTER_KEY, emitter)
 
 defineExpose({ state, getItem, resizeEvent, dragEvent })
+
+function emitUpdateLayout() {
+  emit('update:layout', currentLayout.value);
+}
 
 function increaseItem(item: any) {
   itemInstances.set(item.i, item)
@@ -440,7 +444,7 @@ function dragEvent(
   updateHeight()
   if (eventName === 'dragend') {
     positionsBeforeDrag = undefined
-    emit('layout-updated', currentLayout.value)
+    emitUpdateLayout()
   }
 }
 
@@ -509,7 +513,9 @@ function resizeEvent(
   emitter.emit('compact')
   updateHeight()
 
-  if (eventName === 'resizeend') emit('layout-updated', currentLayout.value)
+  if (eventName === 'resizeend') {
+    emitUpdateLayout()
+  }
 }
 
 function responsiveGridLayout() {
