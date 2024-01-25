@@ -245,8 +245,8 @@ watch(
 )
 watch(
   () => [props.layout, props.layout.length],
-  (layout: Layout) => {
-    currentLayout.value = layout
+  () => {
+    currentLayout.value = props.layout
     layoutUpdate()
   }
 )
@@ -318,7 +318,7 @@ provide(EMITTER_KEY, emitter)
 defineExpose({ state, getItem, resizeEvent, dragEvent })
 
 function emitUpdateLayout() {
-  emit('update:layout', currentLayout.value);
+  emit('update:layout', currentLayout.value)
 }
 
 function increaseItem(item: any) {
